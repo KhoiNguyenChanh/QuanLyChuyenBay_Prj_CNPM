@@ -1,0 +1,87 @@
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark" style="position: relative;">
+    <div class="container-fluid">
+
+        <a class="navbar-brand" href="/">
+            <img style="width: 70px;"
+                 class="rounded mx-auto d-blockd"
+                 src="https://res.cloudinary.com/dbqaequqv/image/upload/v1715782131/Modern_Simple_Tour_and_Travel_Business_Logo_xzcgua.png"
+                 alt="2KS Airline"> 2KS Airline
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mynavbar">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <h5><a class="nav-link" href="/">Trang chủ</a></h5>
+                </li>
+                <li class="nav-item">
+                    <h5>
+                        <a class="nav-link" href="/order">
+                            {% if current_user.is_authenticated %}
+                            {% if current_user.isAdmin() %}
+                            Bán vé
+                            {%else%}
+                            Mua vé
+                            {%endif%}
+                            {%else%}
+                            Mua vé
+                            {%endif%}
+                        </a>
+                    </h5>
+                </li>
+
+                {% if current_user.is_authenticated %}
+                <ul class="navbar-nav ml-auto" style="position: absolute;right: 50px">
+                    <li class="nav-item">
+                        <a class="nav-link text-success" href="/">
+                            {% if current_user.avatar %}
+                            <img src="{{ current_user.avatar }}" width="40" class="rounded-circle"
+                                 alt="{{ current_user.name }}"/>
+                            {% else %}
+                            <img src="https://res.cloudinary.com/dbqaequqv/image/upload/v1710207625/samples/shoe.jpg"
+                                 width="40" class="rounded-circle"
+                                 alt="{{ current_user.name }}"/>
+                            {% endif %}
+                            Chào <span class="text-info">{{ current_user.name }}</span>
+                            <span class="text-info">{{ typeis }}</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" href="/logout">Đăng xuất</a>
+                    </li>
+                </ul>
+
+                {% else %}
+                <ul class="navbar-nav ml-auto" style="position: absolute;right: 50px">
+                    <li class="nav-item">
+                        <a class="nav-link text-success" href="/login">Đăng nhập</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" href="/register">Đăng ký</a>
+                    </li>
+                </ul>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                {% if current_user.isAdmin()%}
+                <li class="nav-item">
+                    <h5><a class="nav-link text-secondary" href="{{ url_for('AddFlightSchedule') }}"> Lập lịch chuyến
+                        bay</a></h5>
+                </li>
+                <li class="nav-item">
+                    <h5><a class="nav-link text-secondary" href="{{ url_for('RuleChange') }}"> Thay đổi quy định</a>
+                    </h5>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <h5><a class="nav-link text-secondary" href="{{ url_for('cart') }}">&#128722; Giỏ hàng <span
+                            class="badge bg-danger cart-counter">{{ cart.total_quantity }}</span></a></h5>
+                </li>
+                {%endif%}
+                {%endif%}
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,118 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+
+{% set limit =  namespace(value =0)%}
+{%set limit.value = gio_mua_toi_da %}
+{%if current_user.is_authenticated %}
+{%if current_user.isAdmin()%}
+{% set limit.value = gio_ban_toi_da %}
+{%else%}
+{%set limit.value = gio_mua_toi_da %}
+{%endif%}
+{%endif%}
+
+
+<h1 class="text-info mt-2 mb-4">Danh sách chuyến bay</h1>
+
+<!--thanh tra cứu chuyến bay sẽ luôn xuất hện ở dưới màn hình, nhưng dừng lại khi gặp foooter-->
+<!--<div class="container" id="tra-cuu-chuyen-bay">-->
+<div class="container mb-5 ">
+    <h2>Tra cứu chuyến bay</h2>
+    <form class="d-flex">
+        <input class="form-control me-2" type="text" placeholder="Từ" name="from">
+        <input class="form-control me-2" type="text" placeholder="Đến" name="to">
+        <input class="form-control me-2" type="date" placeholder="Ngày bay" name="date">
+        <button class="btn btn-primary" type="submit">Tìm</button>
+    </form>
+</div>
+
+
+{% if lich_chuyen_bay %}
+<div class="row" style="margin-bottom:50px; column-gap: 150px;row-gap: 30px;">
+    {% for l in lich_chuyen_bay %}
+    {% set hour = namespace(value = (l.ngay_gio - now).seconds/3600 + (l.ngay_gio-now).days*24)%}
+    <div class="col-md-3 col-sm-12" style="padding:1rem;border: 0.5px solid;margin:5px; position: relative; {%if hour.value < (limit.value|float)
+                        or l.trang_thai_cho_ngoi == False %}opacity:0.6{%endif%}">
+        {%if hour.value < (limit.value|float) %}
+        <h2><p class="badge bg-secondary bg-danger" style="position: absolute; right: 5px;z-index: 9999">Hết thời gian
+            để mua</p></h2>
+        {%endif%}
+        <div class="card">
+
+            {% if l.image and l.image != 'None' %}
+            <div style="width: 100%">
+                <img class="card-img-top" src="{{ l.image }}" alt="{{ l.image }}"
+                     onerror="this.parentNode.style.display='none';">
+            </div>
+            {% else %}
+            <div style="display: none;"></div>
+            {% endif %}
+
+            <div class="card-body">
+                {% for f in chuyen_bay %}
+                {% if f.id == l.chuyen_bay_id %}
+                <h4 class="card-title">{{ f.ten_chuyen_bay }}</h4>
+                {% endif %}
+                {% endfor%}
+                <br><br>
+                <h5 class="card-text">{{ "{:,.0f}".format(l.price) }} VNĐ</h5>
+                <p class="card-text">{{l.ngay_gio}}</p>
+                {% if l.trang_thai_cho_ngoi == True %}
+                <p class="badge bg-success">Còn chỗ</p>
+                {% else %}
+                <p class="badge bg-danger">Hết chỗ</p>
+                {% endif %}
+                <a href="/lich_chuyen_bay/{{ l.id }}" class="btn btn-primary {%if hour.value < (limit.value|float)
+                        or l.trang_thai_cho_ngoi == False %}disabled{%endif%}">Chi tiết</a>
+                <div style="margin-top: 5px">
+                    {%if current_user.is_authenticated %}
+                    {%if current_user.isAdmin() %}
+                    {%else%}
+                    <a href="javascript:;"
+                       onclick="addToCart({{ l.id }}, {{ l.chuyen_bay_id }}, {{ l.price }})"
+                       class="btn btn-danger {%if hour.value < (limit.value|float) or l.trang_thai_cho_ngoi == False %}disabled{%endif%}">
+
+                        Thêm vào giỏ
+                    </a>
+                    {%endif%}
+                    {%endif%}
+                    <!-- slider chọn -->
+                    <div style="margin-top:70px;border:solid 0.5px; padding:1rem">
+                        <form action="/cus_information/chuyen_bay_{{l.chuyen_bay_id}}">
+                            <input type="range" value="1" min="1" max="10"
+                                   oninput="this.nextElementSibling.value = this.value" name="Soluongve"
+                                   {% if hour.value < limit.value|float or not l.trang_thai_cho_ngoi %}
+                            disabled
+                            {% endif %}>
+                            Số vé:
+                            <output>1</output>
+                            <!--                            button chọn-->
+                            <button type="submit" class="btn btn-primary btn-warning"
+                                    {% if hour.value
+                            < (limit.value|float) or l.trang_thai_cho_ngoi == False %}
+                            disabled
+                            {% endif %}>
+                            {% if current_user.is_authenticated %}
+                            {% if current_user.isAdmin() %}
+                            Chọn
+                            {% else %}
+                            Đặt ngay
+                            {% endif %}
+                            {% else %}
+                            Đặt ngay
+                            {% endif %}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<p class="text-danger">Không có chuyến bay nào!</p>
+{% endif %}
+{% endblock %}

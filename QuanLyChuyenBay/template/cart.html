@@ -1,0 +1,113 @@
+{% extends 'layout/base.html' %}
+
+
+{% block content %}
+<h1 class="text-center text-success">Giỏ Hàng</h1>
+{% if 'cart' in session and session['cart'] %}
+
+<table class="table">
+    <tr>
+        <th>Mã vé</th>
+        <th>Chuyến bay</th>
+        <th>Giá</th>
+        <th>Số lượng</th>
+        <th></th>
+    </tr>
+    {% for c in session['cart'].values() %}
+    <tr id="cart{{ c.id }}">
+        <td>{{ c.id }}</td>
+        {% for f in cb %}
+        {% if f.id == c.chuyen_bay_id %}
+        <td>{{ f.ten_chuyen_bay }}</td>
+        {% endif %}
+        {% endfor %}
+        <td>{{ c.price }} VNĐ</td>
+        <td>
+            <input type="number" min="0" onblur="updateCart({{ c.id }}, this)" value="{{ c.quantity }}"
+                   class="form-control"/>
+        </td>
+        <td>
+            <input type="button" onclick="deleteCart({{ c.id }})" value="Xóa" class="btn btn-danger"/>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<div class="alert alert-info">
+    <p>Tổng số lượng: <span class="cart-counter">{{ cart.total_quantity }}</span></p>
+    <p>Tổng tiền: <span class="cart-amount">{{ "{:,.0f}".format(cart.total_amount) }}</span> VNĐ</p>
+</div>
+<div>
+    {% if current_user.is_authenticated %}
+    <a href="/cus_information_cart/{{cart.total_quantity}}">
+        <button type="submit" class="btn btn-primary">Thanh Toán</button>
+    </a>
+    {% else %}
+    <p>Vui lòng <a href="/login?next=/cart">đăng nhập</a> để thanh toán !</p>
+    {% endif %}
+</div>
+{% else %}
+<p>Không có vé trong giỏ hàng</p>
+
+{% endif %}
+<hr>
+<h2>Vé đã đặt</h2>
+{%if ticket %}
+<table class="table" style="border: 1px solid; border-collapse: collapse;">
+    <thead>
+    <tr>
+        <th style="border: 1px solid; border-collapse: collapse;">Mã vé</th>
+        <th style="border: 1px solid; border-collapse: collapse;">Tên khách hàng</th>
+        <th style="border: 1px solid; border-collapse: collapse;">Tên lịch chuyến bay</th>
+        <th style="border: 1px solid; border-collapse: collapse;">Số ghế</th>
+        <th style="border: 1px solid; border-collapse: collapse;">Hạng vé</th>
+        <th style="border: 1px solid; border-collapse: collapse;">Giá tiền</th>
+        <th style="border: 1px solid; border-collapse: collapse;">Ngày đặt</th>
+        <th style="border: 1px solid; border-collapse: collapse;">Trạng thái</th>
+        <th style="border: 1px solid; border-collapse: collapse;"></th>
+    </tr>
+    </thead>
+    <tbody>
+    {%for t in ticket%}
+    <tr>
+        <td style="border: 1px solid; border-collapse: collapse;">
+            {{t.id}}
+        </td>
+        <td style="border: 1px solid; border-collapse: collapse;">
+            {{dao.get_customer(t.customer).name}}
+        </td>
+        <td style="border: 1px solid; border-collapse: collapse;">
+            {{dao.get_chuyen_bay_by_id(dao.chi_tiet_chuyen_bay(dao.get_ticket_detail(t.id).lich_chuyen_bay_id).chuyen_bay_id).ten_chuyen_bay}}
+        </td>
+        <td class="text-center" style="border: 1px solid; border-collapse: collapse;">
+            {{t.so_ghe}}
+        </td>
+        <td style="border: 1px solid; border-collapse: collapse;">
+            {{t.hangVe()}}
+        </td>
+        <td style="border: 1px solid; border-collapse: collapse;">
+            {{dao.get_ticket_detail(t.id).price}} VNĐ
+        </td>
+        <td style="border: 1px solid; border-collapse: collapse;">
+            {{dao.get_ticket_detail(t.id).created_day}}
+        </td>
+        <td style="border: 1px solid; border-collapse: collapse;">
+            {% if dao.chi_tiet_chuyen_bay(dao.get_ticket_detail(t.id).lich_chuyen_bay_id).ngay_gio > now %}
+            <p class="badge bg-success">Chưa bay</p>
+            {% else %}
+            <p class="badge bg-danger">Đã quá giờ bay</p>
+            {% endif %}
+        </td>
+        <td style="border: 1px solid; border-collapse: collapse;">
+            <a href="/lich_chuyen_bay/{{ dao.get_ticket_detail(t.id).lich_chuyen_bay_id }}" class="btn btn-primary">
+                Chi tiết chuyến bay đã đặt
+            </a>
+        </td>
+    </tr>
+    {%endfor%}
+    </tbody>
+</table>
+
+{%endif%}
+{% endblock %}
+
+

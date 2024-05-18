@@ -1,0 +1,111 @@
+{% extends 'layout/base.html' %}
+{% block script %}
+<script>
+    var tonggiatien = {{lich_chuyen_bay.price*sove|int}}
+    function HangVe2() {
+        tonggiatien += {{lich_chuyen_bay.price}}*3
+        let Tong = document.getElementById("Tongtien")
+        Tong.innerText = tonggiatien.toLocaleString("en-US")
+        console.info(tonggiatien)
+        document.getElementById("total").setAttribute('value',tonggiatien);
+    }
+
+    function HangVe1() {
+        tonggiatien -= {{lich_chuyen_bay.price}}*3
+        let Tong = document.getElementById("Tongtien")
+        Tong.innerText = tonggiatien.toLocaleString("en-US")
+        console.info(tonggiatien)
+        document.getElementById("total").setAttribute('value',tonggiatien);
+    }
+
+</script>
+{% endblock %}
+{% block content %}
+<br><br>
+
+<h1 class="text-center">NHẬP THÔNG TIN KHÁCH HÀNG</h1>
+<form action="/api/pay/chuyen_bay_{{chuyen_bay_id}}&so_ve{{sove}}" style="padding-bottom: 250px" method="post">
+    <div style="width:250px;background:lightblue;position:fixed;right: 0px">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th><h4>Tổng Tiền</h4></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><h4 id="Tongtien">{{"{:,.0f}".format(lich_chuyen_bay.price*sove) }}</h4><span
+                        style="font-size: 25px">VNĐ</span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    {% for i in range(sove) %}
+    <h4>Khách hàng thứ {{i+1}}</h4>
+    <div style="padding: 20px; border: 1px solid">
+        <div class="d-flex">
+            <div class="form-check">
+                <input type="radio" class="form-check-input" id="radio1" name="sex{{i}}" value="Nam" checked>Nam
+                <label class="form-check-label" for="radio1"></label>
+            </div>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" id="radio2" name="sex{{i}}" value="Nữ">Nữ
+                <label class="form-check-label" for="radio2"></label>
+            </div>
+        </div>
+        <br>
+        <div class="form-check">
+            <input class="form-check-input" onchange="HangVe1()" type="radio" name="hangve{{i}}" id="flexRadioDefault1"
+                   value="1" checked>
+            <label class="form-check-label" for="flexRadioDefault1">
+                Hạng vé 1
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" onchange="HangVe2()" type="radio" name="hangve{{i}}" id="flexRadioDefault2"
+                   value="2">
+            <label class="form-check-label" for="flexRadioDefault2">
+                Hạng vé 2
+            </label>
+        </div>
+        <br>
+        <div class="mb-3 mt-3">
+            <label for="name" class="form-label">Tên khách hàng</label>
+            <input type="text" class="form-control" id="name" placeholder="Nhập tên..." name="name{{i}}" required>
+        </div>
+        <div class="mb-3">
+            <label for="phone_num" class="form-label">Số điện thoại</label>
+            <input type="text" class="form-control" id="phone_num" placeholder="Nhập số điện thoại"
+                   name="phone_num{{i}}" required>
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="address" class="form-label">Địa chỉ</label>
+            <input type="text" class="form-control" id="address" placeholder="Nhập địa chỉ" name="address{{i}}"
+                   required>
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="text" class="form-control" id="email" placeholder="Nhập email..." name="email{{i}}" required>
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="cmnd" class="form-label">CCCD/CMND</label>
+            <input type="text" class="form-control" id="cmnd" placeholder="Nhập CMND/CCCD" name="CMND{{i}}" required>
+        </div>
+    </div>
+    <br><br>
+    {% endfor %}
+    <input type="number" class="form-control" id="total" value="{{lich_chuyen_bay.price*sove|int}}" name="total" hidden>
+    <div>
+        {% if current_user.is_authenticated %}
+        <button type="submit" onclick="pay()" class="btn btn-primary">{%if current_user.is_authenticated %}{% if
+            current_user.isAdmin()%}Xuất vé{%else%}Thanh toán{%endif%}{%else%}Thanh Toán{%endif%}
+        </button>
+        {% else %}
+        <p>Bạn chưa đăng nhập!!!Hãy<a href="/login?next=/">đăng nhập</a>!</p>
+        {% endif %}
+    </div>
+
+</form>
+{% endblock %}
+<!--http://127.0.0.1:5000/api/pay/1?sex0=Nam&hangve0=2&name0=1&phone_num0=1&address0=1&email0=1&CMND0=1-->
+<!--http://127.0.0.1:5000/api/pay/1?sex0=Nam&hangve0=2&name0=222&phone_num0=22&address0=2&email0=2&CMND0=2-->

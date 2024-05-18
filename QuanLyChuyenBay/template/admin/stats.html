@@ -1,0 +1,127 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+
+{% if current_user.is_authenticated %}
+{% if current_user.isAdmin() %}
+
+
+<h1 class="text-center text-info">THỐNG KÊ DOANH THU</h1>
+{%if month%}
+<h1 class="text-center">Tháng {{month}}</h1>
+{%endif%}
+<br> <br>
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        <table class="table">
+            <tr>
+                <th>Mã lịch chuyến bay</th>
+                <th>Lịch chuyến bay</th>
+                <th>Doanh thu</th>
+                <th>Lượt mua</th>
+                <th>Tỷ lệ</th>
+            </tr>
+            {% for s in stats%}
+            <tr>
+                <th>{{ s[0] }}</th>
+                {%for c in cb%}
+                {%if c.id == s[1] %}
+                <th>{{ c.ten_chuyen_bay }}</th>
+                {%endif%}
+                {%endfor%}
+                <th>
+                    {% if s[2]%}
+                    {{ "{:,.0f}".format(s[2]) }} VNĐ
+                </th>
+                {% else%}
+                0 VND
+                {% endif%}
+                <th>
+                    {% if s[3]%}
+                    {{ s[3] }}
+                </th>
+                {% else%}
+                0
+                {% endif%}
+                </th>
+                <th>
+                    {%if s[2]%}
+                    {{ ((s[2]/tong_doanh_thu) *100)|round(3)}}%
+                    {%else%}
+                    0%
+                    {%endif%}
+                </th>
+            </tr>
+            {% endfor%}
+        </table>
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <form>
+            <div class="form-group">
+                <input type="text" name="kw" class="form-control" placeholder="Nhập từ khóa..."/>
+            </div>
+            <div class="form-group">
+                <label>Tháng</label>
+                <input type="number" max="12" min="1" name="month" class="form-control"/>
+            </div>
+            <div>
+                <input type="submit" value="Lọc dữ liệu" class="btn btn-info"/>
+            </div>
+        </form>
+        <canvas id="revenueStats"></canvas>
+    </div>
+</div>
+<h1>Tổng doanh thu tất cả tháng</h1>
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        <table class="table">
+            <tr>
+                <th>Tháng</th>
+                <th>Doanh thu</th>
+                <!--                <th>Số chuyến bay</th>-->
+                <!--                <th>Tỷ lệ</th>-->
+            </tr>
+            {% for s in month_stats%}
+            <tr>
+                <th>{{ s[0] }}</th>
+                <th>{{ "{:,.1f}".format(s[1]) }} VND</th>
+            </tr>
+            {% endfor%}
+        </table>
+    </div>
+    <table class="table"></table>
+    <div class="col-md-6 col-sm-12"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/chart.js')}}"></script>
+<script>
+    let labels =[]
+    let data = []
+    let colors = []
+    let borderCorlors = []
+     {% for s in stats%}
+        {%for c in cb%}
+           {%if c.id == s[1] %}
+           labels.push('{{s.id}}. {{ c.ten_chuyen_bay }}')
+            {% endif %}
+
+         {% endfor %}
+         {% if s[2]%}
+         data.push({{ s[2] }})
+         {%else%}
+         data.push(0)
+         {%endif%}
+        r = parseInt (Math.random() *255)
+        g = parseInt (Math.random() *255)
+        b = parseInt (Math.random() *255)
+        colors.push(`rgba(${r}, ${g}, ${b}, 0.2)`)
+        borderCorlors.push(`rgba(${r}, ${g}, ${b}, 1)`)
+     {% endfor%}
+     window.onload = function(){
+       drawRevenueChart(labels, data, colors,borderCorlors )
+    }
+</script>
+{% endif %}
+{% endif %}
+{% endblock %}

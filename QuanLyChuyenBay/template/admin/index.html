@@ -1,0 +1,74 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+
+{% if current_user.is_authenticated%}
+<div class="mb-5">
+    <h1 class="text-center text-info ">TRANG CHỦ QUẢN TRỊ CHUYẾN BAY!!</h1>
+    <h2 class="text-center">
+        {% if current_user.isAdmin() %}
+        Chào mừng <span class="text-danger">{{ current_user.username }}</span> quay lại trang quản trị
+
+        {% else %}
+        <span class="text-danger">{{ current_user.username }}</span> không có quyền admin!!!
+        {%endif%}
+    </h2>
+</div>
+
+
+{%if current_user.isAdmin()%}
+<div class="row">
+    <div class="col-md-5 col-sm-12">
+        <table class="table">
+            <tr>
+                <th>Id</th>
+                <th>Tên chuyến bay</th>
+                <th>Lượt bay</th>
+            </tr>
+            {% for s in stats%}
+            <tr>
+                <th>{{ s[0] }}</th>
+                <th>{{ s[1] }}</th>
+                <th>{{ s[2] }}</th>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="col-md-7 col-sm-12">
+        <canvas id="flightStats"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/chart.js')}}"></script>
+<script>
+    let labels =[]
+    let data = []
+     {% for s in stats%}
+     {% if s[2]%}
+        labels.push('{{ s[1] }}')
+        data.push({{ s[2] }})
+     {% endif %}
+     {% endfor%}
+     window.onload = function(){
+       drawFlightChart(labels, data)
+    }
+</script>
+{%endif%}
+{% else %}
+
+<form method="post" action="/login-admin">
+    <div class="mb-3 mt-3">
+        <label for="username" class="form-label">Tên đăng nhập:</label>
+        <input type="text" class="form-control" id="username" placeholder="Nhập tên đăng nhập" name="username">
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Mật khẩu:</label>
+        <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu" name="password">
+    </div>
+    <button type="submit" class="btn btn-primary">Đăng nhập</button>
+</form>
+
+
+{% endif %}
+{% endblock %}

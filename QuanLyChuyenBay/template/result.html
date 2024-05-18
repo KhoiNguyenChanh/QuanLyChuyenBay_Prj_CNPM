@@ -1,0 +1,52 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+
+{% set limit =  namespace(value =0)%}
+{%if current_user.isAdmin()%}
+{% set limit.value = gio_ban_toi_da %}
+{%else%}
+{%set limit.value = gio_mua_toi_da %}
+{%endif%}
+
+<h1 class="text-center mt-2 mb-5">CHUYẾN BAY SẴN CÓ</h1>
+{% if lich_chuyen_bay %}
+<div class="row" style="padding-bottom: 250px;margin-bottom:250px; column-gap: 150px;row-gap: 30px;">
+    {% for l in lich_chuyen_bay %}
+    {% set hour = namespace(value = (l.ngay_gio - now).seconds/3600 + (l.ngay_gio-now).days*24)%}
+    <div class="col-md-3 col-sm-12 " style="padding:1rem;position: relative; border: solid 1px;{%if hour.value < (limit.value|float)
+                        or l.trang_thai_cho_ngoi == False %}opacity:0.6{%endif%}">
+        {%if hour.value < (limit.value|float) %}
+        <h2><p class="badge bg-secondary bg-danger"
+               style="position: absolute; right: 5px;z-index: 9999;opacity:1!important">Hết thời gian</p></h2>
+        {%endif%}
+        <div class="card">
+            <div style="width: 100%">
+                <img class="card-img-top" src="{{ l.image}}" alt="{{ l.image }}">
+            </div>
+            <div class="card-body">
+                {% for f in chuyen_bay %}
+                {% if f.id == l.chuyen_bay_id %}
+                <h4 class="card-title">{{ f.ten_chuyen_bay }}</h4>
+                {% endif %}
+                {% endfor%}
+                <br><br>
+                <h5 class="card-text">{{ "{:,.1f}".format(l.price) }} VNĐ</h5>
+                <p class="card-text">{{l.ngay_gio}}</p>
+                {% if l.trang_thai_cho_ngoi == True %}
+                <p class="badge bg-success">Còn chỗ</p>
+                {% else %}
+                <p class="badge bg-danger">Hết chỗ</p>
+                {% endif %}
+                <a href="/cus_information/{{l.id}}&{{sove}}" class="btn btn-primary {%if hour.value < (limit.value|float)
+                        or l.trang_thai_cho_ngoi == False %}disabled{%endif%}">Chọn</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<p class="text-danger">Không có chuyến bay nào!</p>
+{% endif %}
+{% endblock %}

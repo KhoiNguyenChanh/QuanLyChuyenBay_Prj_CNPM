@@ -1,0 +1,178 @@
+{% extends 'layout/base.html' %}
+{% block script %}
+<script>
+
+
+    function deleteRow(rowid){
+        var btn = document.getElementById("btnAdd")
+        var row = document.getElementById(rowid);
+        row.parentNode.removeChild(row);
+        var ordinal = document.getElementsByClassName("ordinal");
+        var total = document.getElementById("so-san-bay-trung-gian");
+        for (let i = 0; i < ordinal.length; i++)
+                ordinal[i].innerText = i+1;
+        total.value = ordinal.length
+        console.info(total)
+        if(ordinal.length <{{san_bay_trung_gian_toi_da}}){
+            btn.removeAttribute('disabled', '');
+            btn.classList.add("btn-success");
+        }
+
+    }
+
+    var index;
+    $(document).ready(function(){
+        $("#btnAdd").click(function(){
+             console.info(document.getElementById("sbtg").rows.length-1)
+             var x = document.getElementById("sbtg").rows.length-1;
+             window.index = x+1;
+             var i;
+             row = '<tr id = "'+ index +'">';
+             row +=  '<td class="ordinal">' + index;
+
+             row +=  '<td><select class="form-control" id="san_bay_trung_gian" name="san_bay_trung_gian'+index+'">'+
+                    {% for s in san_bay %}
+                    {% if s.tinh_trang_con_trong%}
+                    '<option value="{{s.id}}">{{ s.ten_san_bay}} ({{s.dia_diem}})</option>'+
+                    {%endif%}
+                    {% endfor %}+
+                '</select>';
+             row += '<td><input type="number"
+             name = "thoi_gian_dung'+index+'" step="0.1"
+             min="{{thoi_gian_dung_toi_thieu}}"
+             max="{{thoi_gian_dung_toi_da}}" required/></td>'
+             row += '<td><input type="text" name = "ghi_chu'+index+'"/></td>'
+             row +='<td><input class="btn-danger" type="button" onclick="deleteRow('+index+')" value="X"/>'
+             row += '</tr>';
+             $('.add').append(row);
+             var total = document.getElementById("so-san-bay-trung-gian");
+             total.value = index
+             if(x >= {{san_bay_trung_gian_toi_da}}-1){
+                this.setAttribute('disabled', '');
+                this.classList.remove("btn-success");
+                }
+
+        });
+    });
+
+
+</script>
+{%endblock%}
+{% block content %}
+{% if ero_msg %}
+<div class="alert alert-danger">{{ero_msg}}</div>
+{% endif %}
+<form method="post">
+    <h1 class="text-center">THÊM LỊCH CHUYẾN BAY</h1>
+    <table class="table" style="border: 1px solid; border-collapse: collapse;">
+        <tr>
+            <th class="text-center" style="border: 1px solid; border-collapse: collapse;">Tên chuyến bay</th>
+            <th class="text-center" style="border: 1px solid; border-collapse: collapse;">Máy bay</th>
+            <th class="text-center" style="border: 1px solid; border-collapse: collapse;">Ngày giờ bay</th>
+            <th class="text-center" style="border: 1px solid; border-collapse: collapse;">Thời gian bay</th>
+            <th class="text-center" style="border: 1px solid; border-collapse: collapse;">Sân bay đi</th>
+            <th class="text-center" style="border: 1px solid; border-collapse: collapse;">Sân bay đến</th>
+            <th class="text-center" style="border: 1px solid; border-collapse: collapse;">Giá tiền</th>
+        </tr>
+        <tr>
+            <td class="text-center" style="border: 1px solid; border-collapse: collapse;">
+                <select class="form-control" id="chuyen_bay" name="chuyen_bay">
+                    {% for c in chuyen_bay %}
+                    <option id="chuyen-bay" value="{{c.id}}">{{ c.ten_chuyen_bay}}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td class="text-center" style="border: 1px solid; border-collapse: collapse;">
+                <select class="form-control" id="may_bay" name="may_bay">
+                    {% for m in may_bay %}
+                    {% if m.TinhTrangRanh %}
+                    <option value="{{m.id}}">{{ m.loai_may_bay}}</option>
+                    {%endif%}
+                    {% endfor %}
+                </select>
+            </td>
+            <td class="text-center" style="border: 1px solid; border-collapse: collapse;">
+                <input id="setdate" min="{{now}}" type="date" name="ngay_khoi_hanh" required/>
+            </td>
+            <td class="text-center" style="border: 1px solid; border-collapse: collapse;">
+                <input type="number" min="1" name="thoi_gian_bay" step="0.1" required/>
+            </td>
+            <td class="text-center" style="border: 1px solid; border-collapse: collapse;">
+                <select class="form-control" id="san_bay_di" name="san_bay_di">
+                    {% for s in san_bay %}
+                    {% if s.tinh_trang_con_trong%}
+                    <option value="{{s.id}}">{{ s.ten_san_bay}} ({{s.dia_diem}})</option>
+                    {%endif%}
+                    {% endfor %}
+                </select>
+            </td>
+            <td class="text-center" style="border: 1px solid; border-collapse: collapse;">
+                <select class="form-control" id="san_bay_den" name="san_bay_den">
+                    {% for s in san_bay %}
+                    {% if s.tinh_trang_con_trong%}
+                    <option value="{{s.id}}">{{ s.ten_san_bay}} ({{s.dia_diem}})</option>
+                    {%endif%}
+                    {% endfor %}
+                </select>
+            </td>
+            <td class="text-center" style="border: 1px solid; border-collapse: collapse;">
+                <input type="number" min="1000" step="1000" name="price"/><span>VNĐ</span>
+            </td>
+        </tr>
+    </table>
+    <table class="table" style="border: 1px solid; border-collapse: collapse;">
+        <tr>
+            <th class="text-center" style="border: 1px solid; border-collapse: collapse;">Số lượng ghế hạng 1</th>
+            <th class="text-center" style="border: 1px solid; border-collapse: collapse;">Số lượng ghế hạng 2</th>
+        </tr>
+        <tr>
+            <td class="text-center" style="border: 1px solid; border-collapse: collapse;">
+                <input type="number" value="1" name="soluongh1"/>
+            </td>
+            <td class="text-center" style="border: 1px solid; border-collapse: collapse;">
+                <input type="number" value="1" name="soluongh2"/>
+            </td>
+        </tr>
+    </table>
+    <h4>Sân bay trung gian(tối đa {{san_bay_trung_gian_toi_da}})</h4>
+    <table class="table add" id="sbtg" style="border: 1px solid; border-collapse: collapse;">
+        <tr>
+            <th>STT</th>
+            <th>Sân bay trung gian</th>
+            <th>Thời gian dừng</th>
+            <th>Ghi chú</th>
+            <th></th>
+        </tr>
+        <tr id="1">
+            <td class="ordinal">1</td>
+            <td>
+                <select class="form-control" id="san_bay_trung_gian" name="san_bay_trung_gian1">
+                    {% for s in san_bay %}
+                    {% if s.tinh_trang_con_trong%}
+                    <option value="{{s.id}}">{{ s.ten_san_bay}} ({{s.dia_diem}})</option>
+                    {%endif%}
+                    {% endfor %}
+                </select>
+            </td>
+            <td><input type="number" name="thoi_gian_dung1" step="0.1" min="{{thoi_gian_dung_toi_thieu}}"
+                       max="{{thoi_gian_dung_toi_da}}" required/></td>
+            <td><input type="text" name="ghi_chu1"/></td>
+            <td>
+                <input class="btn-danger" type="button" onclick="deleteRow(1)" value="X"/>
+            </td>
+        </tr>
+    </table>
+    <input class="btn-success" type="button" id="btnAdd" value="+"/>
+    <input type="number" value="1" class="form-control" id="so-san-bay-trung-gian"
+           name="so_san_bay_tg" hidden>
+    <br><br>
+    <p>Link hình chuyến bay</p>
+    <input type="file" class="form-control" id="avatar" name="image" required>
+    <br><br><br>
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary w-25 h-50"><h3>Xác nhận</h3></button>
+    </div>
+</form>
+
+
+{% endblock %}

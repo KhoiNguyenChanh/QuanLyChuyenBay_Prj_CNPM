@@ -1,0 +1,40 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+<h1 class="text-center mt-2 mb-5">Đặt vé</h1>
+<form action="/result" method="get" class="border" style="padding: 20px">
+    <div class="mb-3 mt-3">
+        <div class="form-group">
+            <h4 for="noidi">Địa điểm khởi hành:</h4>
+            <select class="form-control" id="noidi" name="from">
+                {% for a in ten_dia_diem %}
+                <option>{{ a.dia_diem}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="mb-3 mt-3">
+        <div class="form-group">
+            <h4 for="noidi">Nơi đến:</h4>
+            <select class="form-control" id="ten_chuyen_bay" name="to">
+                {% for a in ten_dia_diem %}
+                <option>{{ a.dia_diem}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <h4 for="noiden">Số vé</h4>
+    <input type="range" value="1" min="1" max="10" oninput="this.nextElementSibling.value = this.value"
+           name="Soluongve">
+    <output>1</output>
+    <br><br>
+    <div>
+        {% if current_user.is_authenticated %}
+        <button type="submit" class="btn btn-primary">Tìm chuyến bay</button>
+        {% else %}
+        <p>Vui lòng <a href="/login?next=/order">đăng nhập</a> để tiếp tục!</p>
+        {% endif %}
+    </div>
+
+</form>
+{% endblock %}
