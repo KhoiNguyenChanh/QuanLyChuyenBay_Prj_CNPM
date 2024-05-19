@@ -4,7 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="96d9df6b-e8fe-417d-8f2d-f7652bccdd47" name="Changes" comment="" />
+    <list default="true" id="96d9df6b-e8fe-417d-8f2d-f7652bccdd47" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/dao.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/index.py" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/index.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/template/AddFlightSchedule.html" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/template/AddFlightSchedule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/template/cart.html" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/template/cart.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/template/cus_information.html" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/template/cus_information.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/template/layout/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/template/layout/header.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/utils.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,21 +28,26 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2gbMIOI6MsuYYrrLVBcMmYQAmao" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\4\BTLCNPM\QuanLyChuyenBay_Prj_CNPM" />
+    </key>
+  </component>
   <component name="RunManager" selected="Python.index">
     <configuration name="index" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="QuanLyChuyenBay_Prj_CNPM" />

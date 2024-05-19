@@ -9,7 +9,7 @@ from datetime import datetime
 
 class AuthenticatedModelView(ModelView):
     def is_accessible(self):
-        return current_user.is_authenticated and current_user.user_role == UserRole.STAFF
+        return current_user.is_authenticated and current_user.user_role == UserRole.ADMIN
 
 
 class AuthenticatedBaseView(BaseView):

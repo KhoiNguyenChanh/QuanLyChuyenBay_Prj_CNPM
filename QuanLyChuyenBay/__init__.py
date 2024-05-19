@@ -9,8 +9,7 @@ from urllib.parse import quote
 
 app = Flask(__name__, template_folder='template')
 app.secret_key = "!@#$%^&*()"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:%s@localhost/maybaydb?charset=utf8mb4' % quote(
-    'Admin@123')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:%s@localhost/maybaydb?charset=utf8mb4' % quote('Admin@123')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['CART_KEY'] = 'cart'
 cloudinary.config(cloud_name='dbqaequqv',
@@ -27,6 +26,13 @@ thoi_gian_bay_toi_thieu = 1
 san_bay_trung_gian_toi_da = 5
 thoi_gian_dung_toi_da = 2
 thoi_gian_dung_toi_thieu = 0.1
+
+# Các thông số cần thiết từ tài khoản VNPay Sandbox
+vnpay_config = {
+    'vnp_TmnCode': 'PMAKVMOW',
+    'vnp_HashSecret': 'USYEHCIUSVVCFQYKBQBZSUASXUXRSTCS',
+    'vnp_Url': 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
+}
 
 # babel = Babel(app=app)
 # @babel.localeselector

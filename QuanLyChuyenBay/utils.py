@@ -1,3 +1,4 @@
+# thống kê
 def cart_stats(cart):
     total_amount, total_quantity = 0, 0
 

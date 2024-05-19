@@ -96,7 +96,11 @@ def AddFlightSchedule():
                 ero_msg = 'Hệ thống đang lỗi!!! thử lại sau'
             else:
                 return redirect('/')
-    return render_template('AddFlightSchedule.html', chuyen_bay=chuyen_bay, may_bay=may_bay, san_bay=san_bay, now=now,
+    return render_template('AddFlightSchedule.html',
+                           chuyen_bay=chuyen_bay,
+                           may_bay=may_bay,
+                           san_bay=san_bay,
+                           now=now,
                            ero_msg=ero_msg)
 
 
@@ -314,6 +318,7 @@ def common_atttributes():
     }
 
 
+# pay, cho ng dung thanh toan online
 @app.route('/api/pay/<int:sove>', methods=['post'])
 @login_required
 def pay(sove):
@@ -326,10 +331,12 @@ def pay(sove):
         return redirect("/")
         # return jsonify({'status': 500})
     total = str(int(float(money)))
-    return jsonify({'status': 200})
+    return redirect("/")
+    # return jsonify({'status': 200})
     # return redirect(dao.MoMo(total))
 
 
+# paynow cho nhan vien ban tại cho
 @app.route('/api/pay/chuyen_bay_<int:chuyen_bay_id>&so_ve<int:sove>', methods=['post'])
 @login_required
 def pay_now(sove, chuyen_bay_id):
@@ -339,7 +346,9 @@ def pay_now(sove, chuyen_bay_id):
     else:
         return render_template("test.html", ero='cccc')
     total = str(int(float(money)))
-    return jsonify({'status': 200})
+    # return jsonify({'status': 200})
+    return redirect("/")
+
 
     # return redirect(dao.MoMo(total))
 

@@ -27,23 +27,15 @@
              var x = document.getElementById("sbtg").rows.length-1;
              window.index = x+1;
              var i;
-             row = '<tr id = "'+ index +'">';
-             row +=  '<td class="ordinal">' + index;
-
-             row +=  '<td><select class="form-control" id="san_bay_trung_gian" name="san_bay_trung_gian'+index+'">'+
-                    {% for s in san_bay %}
-                    {% if s.tinh_trang_con_trong%}
-                    '<option value="{{s.id}}">{{ s.ten_san_bay}} ({{s.dia_diem}})</option>'+
-                    {%endif%}
-                    {% endfor %}+
-                '</select>';
-             row += '<td><input type="number"
-             name = "thoi_gian_dung'+index+'" step="0.1"
-             min="{{thoi_gian_dung_toi_thieu}}"
-             max="{{thoi_gian_dung_toi_da}}" required/></td>'
-             row += '<td><input type="text" name = "ghi_chu'+index+'"/></td>'
-             row +='<td><input class="btn-danger" type="button" onclick="deleteRow('+index+')" value="X"/>'
-             row += '</tr>';
+             var row = '<tr id="' + index + '">';
+            row += '<td class="ordinal">' + index + '</td>';
+            row += '<td><select class="form-control" id="san_bay_trung_gian" name="san_bay_trung_gian' + index + '">';
+            row += '{% for s in san_bay %}{% if s.tinh_trang_con_trong %}<option value="{{s.id}}">{{ s.ten_san_bay }} ({{s.dia_diem}})</option>{% endif %}{% endfor %}';
+            row += '</select></td>';
+            row += '<td><input type="number" name="thoi_gian_dung' + index + '" step="0.1" min="{{thoi_gian_dung_toi_thieu}}" max="{{thoi_gian_dung_toi_da}}" required/></td>';
+            row += '<td><input type="text" name="ghi_chu' + index + '"/></td>';
+            row += '<td><input class="btn-danger" type="button" onclick="deleteRow(' + index + ')" value="X"/></td>';
+            row += '</tr>';
              $('.add').append(row);
              var total = document.getElementById("so-san-bay-trung-gian");
              total.value = index
@@ -63,7 +55,7 @@
 <div class="alert alert-danger">{{ero_msg}}</div>
 {% endif %}
 <form method="post">
-    <h1 class="text-center">THÊM LỊCH CHUYẾN BAY</h1>
+    <h1 class="text-center mt-2 mb-5">THÊM LỊCH CHUYẾN BAY</h1>
     <table class="table" style="border: 1px solid; border-collapse: collapse;">
         <tr>
             <th class="text-center" style="border: 1px solid; border-collapse: collapse;">Tên chuyến bay</th>

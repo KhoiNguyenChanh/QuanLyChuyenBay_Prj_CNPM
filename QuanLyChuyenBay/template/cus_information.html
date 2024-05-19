@@ -97,11 +97,15 @@
     <input type="number" class="form-control" id="total" value="{{lich_chuyen_bay.price*sove|int}}" name="total" hidden>
     <div>
         {% if current_user.is_authenticated %}
-        <button type="submit" onclick="pay()" class="btn btn-primary">{%if current_user.is_authenticated %}{% if
-            current_user.isAdmin()%}Xuất vé{%else%}Thanh toán{%endif%}{%else%}Thanh Toán{%endif%}
-        </button>
+            <button type="submit" onclick="pay()" class="btn btn-primary">
+                    {% if current_user.isAdmin() or current_user.isStaff() %}
+                        Xuất vé
+                    {%else%}
+                        Thanh toán
+                    {%endif%}
+            </button>
         {% else %}
-        <p>Bạn chưa đăng nhập!!!Hãy<a href="/login?next=/">đăng nhập</a>!</p>
+            <p>Bạn chưa đăng nhập!!!Hãy<a href="/login?next=/">đăng nhập</a>!</p>
         {% endif %}
     </div>
 
