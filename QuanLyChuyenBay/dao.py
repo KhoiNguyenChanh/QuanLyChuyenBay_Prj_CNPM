@@ -117,6 +117,10 @@ def checkIfDuplicates(listOfElems):
 
 
 def save_ticket_now(sove, id_chuyen_bay):
+    lich_chuyen_bay = chi_tiet_chuyen_bay(id_chuyen_bay)
+    if not lich_chuyen_bay:
+        return False
+
     hangve = []
     sex = []
     name = []
@@ -124,72 +128,78 @@ def save_ticket_now(sove, id_chuyen_bay):
     phone = []
     email = []
     CMND = []
-    l = chi_tiet_chuyen_bay(lich_chuyen_bay_id=id_chuyen_bay)
+
     for i in range(sove):
-        hangve.append(request.form['hangve' + str(i)])
-        sex.append(request.form['sex' + str(i)])
-        name.append(request.form['name' + str(i)])
-        phone.append(request.form['phone_num' + str(i)])
-        address.append(request.form['address' + str(i)])
-        email.append(request.form['email' + str(i)])
-        CMND.append(request.form['CMND' + str(i)])
+        hangve.append(request.form.get('hangve' + str(i)))
+        sex.append(request.form.get('sex' + str(i)))
+        name.append(request.form.get('name' + str(i)))
+        phone.append(request.form.get('phone_num' + str(i)))
+        address.append(request.form.get('address' + str(i)))
+        email.append(request.form.get('email' + str(i)))
+        CMND.append(request.form.get('CMND' + str(i)))
+
     for i in range(sove):
         cus = Customer(name=name[i], sex=sex[i], phone=phone[i], address=address[i], email=email[i], CMND=CMND[i])
         db.session.add(cus)
         t = Ticket(userid=current_user, hang_ve=hangve[i], customerid=cus, so_ghe=i)
         db.session.add(t)
-        if hangve[i] == '2':
-            d = TicketDetail(price=(l.price * 4), lich_chuyen_bay_id=int(l.id), Ticket=t)
-        else:
-            d = TicketDetail(price=l.price, lich_chuyen_bay_id=int(l.id), Ticket=t)
+        price = lich_chuyen_bay.price * (4 if hangve[i] == '2' else 1)
+        d = TicketDetail(price=price, lich_chuyen_bay_id=int(lich_chuyen_bay.id), Ticket=t)
         db.session.add(d)
+
     try:
         db.session.commit()
-    except:
-        return False
-    else:
         return True
+    except Exception as e:
+        print("Error occurred while saving ticket:", e)
+        db.session.rollback()
+        return False
 
 
 def save_ticket(cart, sove):
-    if cart:
-        hangve = []
-        sex = []
-        name = []
-        address = []
-        phone = []
-        email = []
-        CMND = []
-        ticket = []
-        dem = 0
-        for i in range(sove):
-            hangve.append(request.form['hangve' + str(i)])
-            sex.append(request.form['sex' + str(i)])
-            name.append(request.form['name' + str(i)])
-            phone.append(request.form['phone_num' + str(i)])
-            address.append(request.form['address' + str(i)])
-            email.append(request.form['email' + str(i)])
-            CMND.append(request.form['CMND' + str(i)])
-        for i in range(sove):
-            cus = Customer(name=name[i], sex=sex[i], phone=phone[i], address=address[i], email=email[i], CMND=CMND[i])
-            db.session.add(cus)
-            t = Ticket(userid=current_user, hang_ve=hangve[i], customerid=cus, so_ghe=i)
-            ticket.append(t)
-            db.session.add(t)
-        for c in cart.values():
-            for i in range(c['quantity']):
-                if hangve[dem] == '2':
-                    d = TicketDetail(price=(c['price'] * 4), lich_chuyen_bay_id=int(c['id']), Ticket=ticket[dem])
-                else:
-                    d = TicketDetail(price=c['price'], lich_chuyen_bay_id=int(c['id']), Ticket=ticket[dem])
-                dem = dem + 1
+    if not cart:
+        return False
+
+    hangve = []
+    sex = []
+    name = []
+    address = []
+    phone = []
+    email = []
+    CMND = []
+
+    for i in range(sove):
+        hangve.append(request.form.get('hangve' + str(i)))
+        sex.append(request.form.get('sex' + str(i)))
+        name.append(request.form.get('name' + str(i)))
+        phone.append(request.form.get('phone_num' + str(i)))
+        address.append(request.form.get('address' + str(i)))
+        email.append(request.form.get('email' + str(i)))
+        CMND.append(request.form.get('CMND' + str(i)))
+
+    try:
+        for i, c in enumerate(cart.values()):
+            for _ in range(c['quantity']):
+                cus = Customer(name=name[i], sex=sex[i], phone=phone[i], address=address[i], email=email[i],
+                               CMND=CMND[i])
+                db.session.add(cus)
+                t = Ticket(userid=current_user, hang_ve=hangve[i], customerid=cus, so_ghe=i)
+                db.session.add(t)
+                price = c['price'] * (4 if hangve[i] == '2' else 1)
+                d = TicketDetail(price=price, lich_chuyen_bay_id=int(c['id']), Ticket=t)
                 db.session.add(d)
-        try:
-            db.session.commit()
-        except Exception as e:
-            return e
-        else:
-            return True
+    except Exception as e:
+        print("Error occurred while saving ticket:", e)
+        db.session.rollback()
+        return False
+
+    try:
+        db.session.commit()
+        return True
+    except Exception as e:
+        print("Error occurred while saving ticket:", e)
+        db.session.rollback()
+        return False
 
 
 def count_flight_by_flightSchedule():

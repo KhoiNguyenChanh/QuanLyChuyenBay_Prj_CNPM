@@ -6,16 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="96d9df6b-e8fe-417d-8f2d-f7652bccdd47" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/dao.py" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/dao.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/index.py" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/index.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/template/AddFlightSchedule.html" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/template/AddFlightSchedule.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/template/cart.html" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/template/cart.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/template/cus_information.html" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/template/cus_information.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/template/layout/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/template/layout/header.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/QuanLyChuyenBay/template/admin/stats.html" beforeDir="false" afterPath="$PROJECT_DIR$/QuanLyChuyenBay/template/admin/stats.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
